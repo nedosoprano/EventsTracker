@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EventTracker.Application\EventsTracker.Application.csproj" />
+    <ProjectReference Include="..\EventsTracker.Application\EventsTracker.Application.csproj" />
   </ItemGroup>
 
 </Project>

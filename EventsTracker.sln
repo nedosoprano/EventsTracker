@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsTracker.Host", "Event
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsTracker.DataAccess", "EventsTracker.DataAccess\EventsTracker.DataAccess.csproj", "{A21A9CDE-013E-4E76-8ADB-C99A9EFBA678}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsTracker.Application", "EventTracker.Application\EventsTracker.Application.csproj", "{1806849E-0D1F-4C11-BB7C-3EC863EC1695}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsTracker.Application", "EventsTracker.Application\EventsTracker.Application.csproj", "{1806849E-0D1F-4C11-BB7C-3EC863EC1695}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
