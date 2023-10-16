@@ -7,7 +7,7 @@ namespace EventsTracker.DataAccess.Extensions
     {
         public static IServiceCollection AddDataAccessProject(this IServiceCollection services)
         {
-            services.AddScoped<IRepository<Event>, EventRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
 
             return services;
         }

@@ -8,17 +8,25 @@ namespace EventsTracker.Controllers
     [Route("[controller]")]
     public class EventController : ControllerBase
     {
-        private IService<EventsPerDate> _eventService;
+        private IEventsPerDateService _eventsPerDateService;
 
-        public EventController(IService<EventsPerDate> eventService)
+        public EventController(IEventsPerDateService eventsPerDateService)
         {
-            _eventService = eventService;
+            _eventsPerDateService = eventsPerDateService;
+        }
+
+        [HttpGet("getevents")]
+        public IActionResult GetEvents([FromQuery] int year, [FromQuery] string month)
+        {
+            var eventsPerDate = _eventsPerDateService.GetEventsInInterval(year, month);
+
+            return Ok(eventsPerDate);
         }
 
         [HttpPost("addevents")]
         public IActionResult AddEvents(EventsPerDate eventsPerDate)
         {
-            _eventService.Add(eventsPerDate);
+            _eventsPerDateService.AddEvents(eventsPerDate);
 
             return Created("/addevents", null);
         }

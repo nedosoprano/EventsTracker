@@ -9,7 +9,7 @@ namespace EventsTracker.Application
         public static IServiceCollection AddApplicationProject(this IServiceCollection services)
         {
             services.AddDataAccessProject();
-            services.AddScoped<IService<EventsPerDate>, EventsPerDateService>();
+            services.AddScoped<IEventsPerDateService, EventsPerDateService>();
 
             return services;
         }

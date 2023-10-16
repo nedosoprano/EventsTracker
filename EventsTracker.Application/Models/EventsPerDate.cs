@@ -6,6 +6,17 @@ namespace EventsTracker.Application.Models
     {
         public DateTime Date { get; set; }
 
-        public List<Event> Events { get; set; } = new List<Event>();
+        public IEnumerable<Event> Events { get; set; }
+
+        public EventsPerDate() 
+        {
+            Events = new List<Event>();
+        }
+
+        public EventsPerDate(DateTime date, IEnumerable<Event> events) 
+        { 
+            Date = date;
+            Events = events;
+        }
     }
 }
