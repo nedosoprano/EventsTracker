@@ -2,56 +2,31 @@
 
 namespace EventsTracker.DataAccess
 {
+    public interface IEventRepository
+    {
+        void AddEvents(IEnumerable<Event> entities);
+
+        IEnumerable<Event> GetEventsInInterval(DateTime startDate, DateTime endDate);
+    }
+
     public class EventRepository : IEventRepository
     {
-        private List<Event> _events = new List<Event>()
+        private readonly EventsTrackerContext _eventsTrackerContext;
+
+        public EventRepository(EventsTrackerContext eventsTrackerContext)
         {
-            new Event
-            {
-                Id = Guid.NewGuid(),
-                Date = DateTime.Parse("2023-12-1"),
-                Title = "event1"
-            },
-            new Event
-            {
-                Id = Guid.NewGuid(),
-                Date = DateTime.Parse("2022-12-14"),
-                Title = "event2"
-            },
-            new Event
-            {
-                Id = Guid.NewGuid(),
-                Date = DateTime.Parse("2022-12-15"),
-                Title = "event3"
-            },
-            new Event
-            {
-                Id = Guid.NewGuid(),
-                Date = DateTime.Parse("2023-12-31"),
-                Title = "event4"
-            },
-            new Event
-            {
-                Id = Guid.NewGuid(),
-                Date = DateTime.Parse("2023-12-16"),
-                Title = "event5"
-            },
-            new Event
-            {
-                Id = Guid.NewGuid(),
-                Date = DateTime.Parse("2023-12-31"),
-                Title = "event6"
-            },
-        };
+            _eventsTrackerContext = eventsTrackerContext;
+        }
 
         public void AddEvents(IEnumerable<Event> events)
         {
-            _events.AddRange(events);
+            _eventsTrackerContext.Events.AddRange(events);
+            _eventsTrackerContext.SaveChanges();
         }
 
         public IEnumerable<Event> GetEventsInInterval(DateTime startDate, DateTime endDate)
         {
-            return _events.Where(e => e.Date >= startDate && e.Date <= endDate);
+            return _eventsTrackerContext.Events.Where(e => e.Date >= startDate && e.Date <= endDate);
         }
     }
 }

@@ -1,11 +1,17 @@
 ﻿using EventsTracker.Application.Extensions;
 using EventsTracker.Application.Models;
 using EventsTracker.DataAccess;
-using EventsTracker.DataAccess.Models;
 using System.Globalization;
 
 namespace EventsTracker.Application
 {
+    public interface IEventsPerDateService
+    {
+        public void AddEvents(EventsPerDate eventsPerDate);
+
+        public IEnumerable<EventsPerDate> GetEventsInInterval(int year, string month);
+    }
+
     public class EventsPerDateService : IEventsPerDateService
     {
         private IEventRepository _eventRepository;
@@ -27,8 +33,8 @@ namespace EventsTracker.Application
             int month = DateTime.ParseExact(monthName, "MMMM", CultureInfo.InvariantCulture).Month;
             int monthLastDay = DateTime.DaysInMonth(year, month);
 
-            DateTime startDate = new DateTime(year, month, 1);
-            DateTime endDate = new DateTime(year, month, monthLastDay);
+            var startDate = new DateTime(year, month, 1);
+            var endDate = new DateTime(year, month, monthLastDay);
 
             var events = _eventRepository.GetEventsInInterval(startDate, endDate);
 

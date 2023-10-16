@@ -1,4 +1,4 @@
-﻿using EventsTracker.DataAccess.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventsTracker.DataAccess.Extensions
@@ -8,6 +8,9 @@ namespace EventsTracker.DataAccess.Extensions
         public static IServiceCollection AddDataAccessProject(this IServiceCollection services)
         {
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddDbContext<EventsTrackerContext>(
+                optionsBuilder => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;User Id=postgres;Password=soprano490;Database=EventsTracker;")
+            );
 
             return services;
         }
