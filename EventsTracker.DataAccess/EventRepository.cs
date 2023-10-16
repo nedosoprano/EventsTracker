@@ -1,12 +1,13 @@
 ﻿using EventsTracker.DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsTracker.DataAccess
 {
     public interface IEventRepository
     {
-        void AddEvents(IEnumerable<Event> entities);
+        Task AddEventsAsync(IEnumerable<Event> entities, CancellationToken cancellationToken);
 
-        IEnumerable<Event> GetEventsInInterval(DateTime startDate, DateTime endDate);
+        Task<IEnumerable<Event>> GetEventsInIntervalAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken);
     }
 
     public class EventRepository : IEventRepository
@@ -18,15 +19,19 @@ namespace EventsTracker.DataAccess
             _eventsTrackerContext = eventsTrackerContext;
         }
 
-        public void AddEvents(IEnumerable<Event> events)
+        public async Task AddEventsAsync(IEnumerable<Event> events, CancellationToken cancellationToken)
         {
             _eventsTrackerContext.Events.AddRange(events);
-            _eventsTrackerContext.SaveChanges();
+
+            await _eventsTrackerContext.SaveChangesAsync(cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public IEnumerable<Event> GetEventsInInterval(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<Event>> GetEventsInIntervalAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
         {
-            return _eventsTrackerContext.Events.Where(e => e.Date >= startDate && e.Date <= endDate);
+            return await _eventsTrackerContext.Events.Where(e => e.Date >= startDate && e.Date <= endDate)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }

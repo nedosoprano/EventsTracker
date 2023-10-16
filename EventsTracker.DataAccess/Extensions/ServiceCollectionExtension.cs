@@ -12,6 +12,8 @@ namespace EventsTracker.DataAccess.Extensions
                 optionsBuilder => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;User Id=postgres;Password=soprano490;Database=EventsTracker;")
             );
 
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             return services;
         }
     }

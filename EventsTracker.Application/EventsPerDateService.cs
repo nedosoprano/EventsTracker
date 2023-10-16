@@ -7,9 +7,9 @@ namespace EventsTracker.Application
 {
     public interface IEventsPerDateService
     {
-        public void AddEvents(EventsPerDate eventsPerDate);
+        public Task AddEventsAsync(EventsPerDate eventsPerDate, CancellationToken cancellationToken);
 
-        public IEnumerable<EventsPerDate> GetEventsInInterval(int year, string month);
+        public Task<IEnumerable<EventsPerDate>> GetEventsInIntervalAsync(int year, string month, CancellationToken cancellationToken);
     }
 
     public class EventsPerDateService : IEventsPerDateService
@@ -21,14 +21,14 @@ namespace EventsTracker.Application
             _eventRepository = eventRepository;
         }
 
-        public void AddEvents(EventsPerDate eventsPerDate)
+        public async Task AddEventsAsync(EventsPerDate eventsPerDate, CancellationToken cancellationToken)
         {
             var events = eventsPerDate.ConvertToEvents();
 
-            _eventRepository.AddEvents(events);
+            await _eventRepository.AddEventsAsync(events, cancellationToken);
         }
 
-        public IEnumerable<EventsPerDate> GetEventsInInterval(int year, string monthName)
+        public async Task<IEnumerable<EventsPerDate>> GetEventsInIntervalAsync(int year, string monthName, CancellationToken cancellationToken)
         {
             int month = DateTime.ParseExact(monthName, "MMMM", CultureInfo.InvariantCulture).Month;
             int monthLastDay = DateTime.DaysInMonth(year, month);
@@ -36,7 +36,7 @@ namespace EventsTracker.Application
             var startDate = new DateTime(year, month, 1);
             var endDate = new DateTime(year, month, monthLastDay);
 
-            var events = _eventRepository.GetEventsInInterval(startDate, endDate);
+            var events = await _eventRepository.GetEventsInIntervalAsync(startDate, endDate, cancellationToken);
 
             var grouppedEvents = events.GroupBy(e => e.Date);
 

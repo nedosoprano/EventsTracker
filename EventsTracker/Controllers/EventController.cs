@@ -16,17 +16,17 @@ namespace EventsTracker.Controllers
         }
 
         [HttpGet("getevents")]
-        public IActionResult GetEvents([FromQuery] int year, [FromQuery] string month)
+        public async Task<IActionResult> GetEvents([FromQuery] int year, [FromQuery] string month, CancellationToken cancellationToken)
         {
-            var eventsPerDate = _eventsPerDateService.GetEventsInInterval(year, month);
+            var eventsPerDate = await _eventsPerDateService.GetEventsInIntervalAsync(year, month, cancellationToken);
 
             return Ok(eventsPerDate);
         }
 
         [HttpPost("addevents")]
-        public IActionResult AddEvents(EventsPerDate eventsPerDate)
+        public async Task<IActionResult> AddEvents(EventsPerDate eventsPerDate, CancellationToken cancellationToken)
         {
-            _eventsPerDateService.AddEvents(eventsPerDate);
+            await _eventsPerDateService.AddEventsAsync(eventsPerDate, cancellationToken);
 
             return Created("/addevents", null);
         }
