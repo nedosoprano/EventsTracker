@@ -15,7 +15,11 @@ namespace EventsTracker.Controllers
             _eventsPerDateService = eventsPerDateService;
         }
 
-        [HttpGet("getevents")]
+        /// <summary>
+        /// Creates new events.
+        /// </summary>
+        /// <param name="eventsPerDate">The events data.</param>
+        [HttpGet("get")]
         public async Task<IActionResult> GetEvents([FromQuery] int year, [FromQuery] string month, CancellationToken cancellationToken)
         {
             var eventsPerDate = await _eventsPerDateService.GetEventsInIntervalAsync(year, month, cancellationToken);
@@ -23,12 +27,15 @@ namespace EventsTracker.Controllers
             return Ok(eventsPerDate);
         }
 
-        [HttpPost("addevents")]
-        public async Task<IActionResult> AddEvents(EventsPerDate eventsPerDate, CancellationToken cancellationToken)
+        /// <summary>
+        /// Gets events all days of the month with events for a certain month and year.
+        /// </summary>
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateEvents(EventsPerDate eventsPerDate, CancellationToken cancellationToken)
         {
-            await _eventsPerDateService.AddEventsAsync(eventsPerDate, cancellationToken);
+            await _eventsPerDateService.CreateEventsAsync(eventsPerDate, cancellationToken);
 
-            return Created("/addevents", null);
+            return Created("/create", null);
         }
     }
 }

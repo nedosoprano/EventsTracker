@@ -6,13 +6,24 @@ using System.Globalization;
 
 namespace EventsTracker.Application
 {
+    /// <summary>
+    /// Represets the service that performs operations with <see cref="EventsPerDate"/> instances.
+    /// </summary>
     public interface IEventsPerDateService
     {
-        public Task AddEventsAsync(EventsPerDate eventsPerDate, CancellationToken cancellationToken);
+        /// <summary>
+        /// Creates new events.
+        /// </summary>
+        /// <param name="eventsPerDate">The events data.</param>
+        public Task CreateEventsAsync(EventsPerDate eventsPerDate, CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Gets all days of the month with events for a certain month and year.
+        /// </summary>
         public Task<IEnumerable<EventsPerDate>> GetEventsInIntervalAsync(int year, string month, CancellationToken cancellationToken);
     }
 
+    /// <inheritdoc/>
     public class EventsPerDateService : IEventsPerDateService
     {
         private IEventRepository _eventRepository;
@@ -22,18 +33,21 @@ namespace EventsTracker.Application
             _eventRepository = eventRepository;
         }
 
-        public async Task AddEventsAsync(EventsPerDate eventsPerDate, CancellationToken cancellationToken)
+        /// <inheritdoc/>
+        public async Task CreateEventsAsync(EventsPerDate eventsPerDate, CancellationToken cancellationToken)
         {
             ValidateEventsPerDate(eventsPerDate);
 
             var events = eventsPerDate.ConvertToEvents();
 
-            await _eventRepository.AddEventsAsync(events, cancellationToken);
+            await _eventRepository.CreateEventsAsync(events, cancellationToken);
         }
 
+        /// <inheritdoc/>
         public async Task<IEnumerable<EventsPerDate>> GetEventsInIntervalAsync(int year, string monthName, CancellationToken cancellationToken)
         {
-            ValidateMonthName(monthName);
+            if (string.IsNullOrEmpty(monthName))
+                throw new ArgumentException($"{nameof(monthName)} is required!");
 
             int month = DateTime.ParseExact(monthName, "MMMM", CultureInfo.InvariantCulture).Month;
             int monthLastDay = DateTime.DaysInMonth(year, month);
@@ -74,12 +88,6 @@ namespace EventsTracker.Application
         {
             if (eventsPerDate.Events is null || !eventsPerDate.Events.Any())
                 throw new ArgumentException($"{nameof(eventsPerDate.Events)} must not be null!");
-        }
-        
-        private static void ValidateMonthName(string monthName)
-        {
-            if (string.IsNullOrEmpty(monthName))
-                throw new ArgumentException($"{nameof(monthName)} is required!");
         }
     }
 }

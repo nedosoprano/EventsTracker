@@ -3,13 +3,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventsTracker.DataAccess
 {
+    /// <summary>
+    /// Interacts with events tracker database.
+    /// </summary>
     public interface IEventRepository
     {
-        Task AddEventsAsync(IEnumerable<Event> entities, CancellationToken cancellationToken);
+        /// <summary>
+        /// Creates new events.
+        /// </summary>
+        Task CreateEventsAsync(IEnumerable<Event> entities, CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Gets all days of the month with events for a certain month and year.
+        /// </summary>
         Task<IEnumerable<Event>> GetEventsInIntervalAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken);
     }
 
+    /// <inheritdoc/>
     public class EventRepository : IEventRepository
     {
         private readonly EventsTrackerContext _eventsTrackerContext;
@@ -19,7 +29,8 @@ namespace EventsTracker.DataAccess
             _eventsTrackerContext = eventsTrackerContext;
         }
 
-        public async Task AddEventsAsync(IEnumerable<Event> events, CancellationToken cancellationToken)
+        /// <inheritdoc/>
+        public async Task CreateEventsAsync(IEnumerable<Event> events, CancellationToken cancellationToken)
         {
             _eventsTrackerContext.Events.AddRange(events);
 
@@ -27,6 +38,7 @@ namespace EventsTracker.DataAccess
                 .ConfigureAwait(false);
         }
 
+        /// <inheritdoc/>
         public async Task<IEnumerable<Event>> GetEventsInIntervalAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
         {
             return await _eventsTrackerContext.Events.Where(e => e.Date >= startDate && e.Date <= endDate)

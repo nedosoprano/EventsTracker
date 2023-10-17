@@ -1,4 +1,4 @@
-using EventsTracker.Application;
+using EventsTracker.Application.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventsTracker.DataAccess
 {
+    /// <summary>
+    /// Events tracker db context.
+    /// </summary>
     public class EventsTrackerContext : DbContext
     {
         public DbSet<Event> Events { get; set; }

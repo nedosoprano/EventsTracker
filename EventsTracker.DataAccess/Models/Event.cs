@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace EventsTracker.DataAccess.Models
 {
+    /// <summary>
+    /// Represents an event entity.
+    /// </summary>
     [Table("events")]
     public class Event
     {
