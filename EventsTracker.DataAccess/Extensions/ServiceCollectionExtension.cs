@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventsTracker.DataAccess.Extensions
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddDataAccessProject(this IServiceCollection services)
+        public static IServiceCollection AddDataAccessProject(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddDbContext<EventsTrackerContext>(
-                optionsBuilder => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;User Id=postgres;Password=soprano490;Database=EventsTracker;")
+                optionsBuilder => optionsBuilder.UseNpgsql(configuration.GetValue<string>("EventsTrackerDbConnectionString"))
             );
 
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
